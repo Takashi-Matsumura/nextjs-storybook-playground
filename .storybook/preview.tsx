@@ -11,6 +11,13 @@ const preview: Preview = {
        date: /Date$/i,
       },
     },
+
+    a11y: {
+      // 'todo'  - 違反を表示するだけ（テストは失敗しない）
+      // 'error' - 違反があるとテストを失敗させる（npm test / CI）
+      // 'off'   - チェックしない
+      test: 'error'
+    }
   },
 };
 
