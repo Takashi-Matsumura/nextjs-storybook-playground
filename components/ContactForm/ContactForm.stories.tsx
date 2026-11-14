@@ -1,0 +1,82 @@
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+
+import { expect, fn } from 'storybook/test';
+
+import { ContactForm } from './ContactForm';
+
+const meta = {
+  title: 'Components/ContactForm',
+  component: ContactForm,
+  parameters: { layout: 'centered' },
+  tags: ['autodocs'],
+  // fn() で onSubmit をスパイにする（呼ばれた回数・引数を検証できる）
+  args: { onSubmit: fn() },
+} satisfies Meta<typeof ContactForm>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+// 何も操作しない初期表示
+export const Default: Story = {};
+
+// ① 正しく入力して送信 → onSubmit が入力値で呼ばれ、完了メッセージが出る
+export const SubmitSuccess: Story = {
+  play: async ({ args, canvas, userEvent, step }) => {
+    await step('3つの項目を入力する', async () => {
+      // ラベル名で入力欄を探す（ユーザーが画面を見るのと同じ探し方）
+      await userEvent.type(canvas.getByLabelText('お名前'), '山田 太郎');
+      await userEvent.type(canvas.getByLabelText('メールアドレス'), 'taro@example.com');
+      await userEvent.type(canvas.getByLabelText('お問い合わせ内容'), 'Storybook について');
+    });
+
+    await step('送信ボタンを押す', async () => {
+      await userEvent.click(canvas.getByRole('button', { name: '送信する' }));
+    });
+
+    await expect(args.onSubmit).toHaveBeenCalledTimes(1);
+    await expect(args.onSubmit).toHaveBeenCalledWith({
+      name: '山田 太郎',
+      email: 'taro@example.com',
+      message: 'Storybook について',
+    });
+    // 送信後の非同期な画面更新は findBy〜 で「現れるまで待つ」
+    await expect(await canvas.findByText('送信しました。ありがとうございます。')).toBeVisible();
+    // 送信後は入力欄が空に戻る
+    await expect(canvas.getByLabelText('お名前')).toHaveValue('');
+  },
+};
+
+// ② 何も入力せずに送信 → エラーが出て、onSubmit は呼ばれない
+export const EmptySubmit: Story = {
+  play: async ({ args, canvas, userEvent }) => {
+    await userEvent.click(canvas.getByRole('button', { name: '送信する' }));
+
+    await expect(canvas.getByText('お名前を入力してください')).toBeVisible();
+    await expect(canvas.getByText('メールアドレスを入力してください')).toBeVisible();
+    await expect(canvas.getByText('お問い合わせ内容を入力してください')).toBeVisible();
+    // 支援技術向けにも「エラーである」ことが伝わっているか
+    await expect(canvas.getByLabelText('お名前')).toHaveAttribute('aria-invalid', 'true');
+    await expect(args.onSubmit).not.toHaveBeenCalled();
+  },
+};
+
+// ③ メールアドレスの形式が不正 → メール欄だけエラー
+export const InvalidEmail: Story = {
+  play: async ({ args, canvas, userEvent }) => {
+    await userEvent.type(canvas.getByLabelText('お名前'), '山田 太郎');
+    await userEvent.type(canvas.getByLabelText('メールアドレス'), 'taro@example');
+    await userEvent.type(canvas.getByLabelText('お問い合わせ内容'), 'テスト');
+    await userEvent.click(canvas.getByRole('button', { name: '送信する' }));
+
+    await expect(canvas.getByText('メールアドレスの形式が正しくありません')).toBeVisible();
+    await expect(canvas.queryByText('お名前を入力してください')).not.toBeInTheDocument();
+    await expect(args.onSubmit).not.toHaveBeenCalled();
+
+    // 直して再送信すると通る
+    const email = canvas.getByLabelText('メールアドレス');
+    await userEvent.clear(email);
+    await userEvent.type(email, 'taro@example.com');
+    await userEvent.click(canvas.getByRole('button', { name: '送信する' }));
+    await expect(args.onSubmit).toHaveBeenCalledTimes(1);
+  },
+};
