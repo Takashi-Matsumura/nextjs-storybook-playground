@@ -25,8 +25,8 @@ export const Success: Story = {
   play: async ({ canvas }) => {
     const badge = canvas.getByText('公開中');
     await expect(badge).toBeVisible();
-    // CSS Modules のクラス名はハッシュ付きなので、部分一致で確認する
-    await expect(badge.className).toMatch(/success/);
+    // Tailwind が Storybook で効いていれば、背景色が透明ではなくなる
+    await expect(getComputedStyle(badge).backgroundColor).not.toBe('rgba(0, 0, 0, 0)');
   },
 };
 
@@ -45,6 +45,11 @@ export const Small: Story = {
 // 長いテキストでも崩れないかを確認するための Story
 export const LongLabel: Story = {
   args: { label: 'とても長いラベルのテキストが入った場合の表示確認' },
+};
+
+// className で Tailwind のクラスを外から追加できる
+export const WithClassName: Story = {
+  args: { label: 'カスタム', className: 'ring-2 ring-pink-400 ring-offset-2' },
 };
 
 // render を使うと、複数を並べた一覧も Story にできる
