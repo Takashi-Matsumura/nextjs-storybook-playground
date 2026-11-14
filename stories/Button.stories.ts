@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
-import { fn } from 'storybook/test';
+import { expect, fn } from 'storybook/test';
 
 import { Button } from './Button';
 
@@ -50,5 +50,29 @@ export const Small: Story = {
   args: {
     size: 'small',
     label: 'Button',
+  },
+};
+
+// Interaction test: play 関数は Story の描画後に自動で実行される
+export const ClickTest: Story = {
+  args: {
+    primary: true,
+    label: 'クリックしてね',
+  },
+  play: async ({ args, canvas, userEvent, step }) => {
+    // 1. 画面からボタンを探す（ユーザーと同じく「役割」と「名前」で探す）
+    const button = canvas.getByRole('button', { name: 'クリックしてね' });
+
+    // 2. クリック前は onClick が呼ばれていない
+    await expect(args.onClick).not.toHaveBeenCalled();
+
+    // 3. ユーザー操作を再現する（step で Interactions パネル上の区切りを付けられる）
+    await step('2回クリックする', async () => {
+      await userEvent.click(button);
+      await userEvent.click(button);
+    });
+
+    // 4. 結果を検証する
+    await expect(args.onClick).toHaveBeenCalledTimes(2);
   },
 };

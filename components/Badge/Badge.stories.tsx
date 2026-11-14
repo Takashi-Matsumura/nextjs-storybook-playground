@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
+import { expect } from 'storybook/test';
+
 import { Badge } from './Badge';
 
 // meta: このファイル全体の設定（サイドバーの場所・対象コンポーネント・共通の args）
@@ -19,6 +21,13 @@ export const Neutral: Story = {};
 
 export const Success: Story = {
   args: { variant: 'success', label: '公開中' },
+  // 操作のないコンポーネントでも、play で「正しく描画されたか」を検証できる
+  play: async ({ canvas }) => {
+    const badge = canvas.getByText('公開中');
+    await expect(badge).toBeVisible();
+    // CSS Modules のクラス名はハッシュ付きなので、部分一致で確認する
+    await expect(badge.className).toMatch(/success/);
+  },
 };
 
 export const Warning: Story = {
