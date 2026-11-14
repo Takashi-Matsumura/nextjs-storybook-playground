@@ -1,4 +1,4 @@
-import './badge.css';
+import styles from './Badge.module.css';
 
 export interface BadgeProps {
   /** 表示するテキスト */
@@ -12,7 +12,7 @@ export interface BadgeProps {
 /** 状態やカテゴリを示す小さなラベル */
 export const Badge = ({ label, variant = 'neutral', size = 'medium' }: BadgeProps) => {
   return (
-    <span className={['badge', `badge--${variant}`, `badge--${size}`].join(' ')}>
+    <span className={[styles.badge, styles[variant], styles[size]].join(' ')}>
       {label}
     </span>
   );

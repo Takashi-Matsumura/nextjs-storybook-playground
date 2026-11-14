@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Badge } from "@/components/Badge/Badge";
 
 export default function Home() {
   return (
@@ -38,6 +39,23 @@ export default function Home() {
             center.
           </p>
         </div>
+        <section className="flex flex-col items-center gap-3 sm:items-start">
+          <h2 className="text-lg font-semibold text-black dark:text-zinc-50">
+            Badge
+          </h2>
+          <div className="flex flex-wrap gap-2">
+            <Badge label="Neutral" />
+            <Badge variant="success" label="公開中" />
+            <Badge variant="warning" label="下書き" />
+            <Badge variant="danger" label="エラー" />
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <Badge size="small" label="Neutral" />
+            <Badge size="small" variant="success" label="Success" />
+            <Badge size="small" variant="warning" label="Warning" />
+            <Badge size="small" variant="danger" label="Danger" />
+          </div>
+        </section>
         <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
           <a
             className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"

@@ -4,7 +4,7 @@ import { Badge } from './Badge';
 
 // meta: このファイル全体の設定（サイドバーの場所・対象コンポーネント・共通の args）
 const meta = {
-  title: 'Example/Badge',
+  title: 'Components/Badge',
   component: Badge,
   parameters: { layout: 'centered' },
   tags: ['autodocs'],
