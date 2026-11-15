@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { Badge } from "@/components/Badge/Badge";
 import { BrandSwitcher } from "../brand-switcher";
+import { BadgePlayground } from "./badge-playground";
 import { ContactPlayground } from "./contact-playground";
 
 export const metadata: Metadata = {
@@ -92,8 +93,13 @@ export default function PlaygroundPage() {
           </div>
         </Block>
 
-        <Block title="Badge" lead="variant（色の種類）と size（大きさ）の組み合わせ。Storybook の Badge と同じ部品です。">
-          <div className="flex flex-wrap items-center gap-2">
+        <Block
+          title="Badge"
+          lead="label・variant・size を変えると、その場で表示とコードが変わります。Storybook の Controls と同じ操作です。"
+        >
+          <BadgePlayground />
+          <p className="mt-6 text-sm font-semibold text-fg">全部の組み合わせ</p>
+          <div className="mt-2 flex flex-wrap items-center gap-2">
             <Badge label="Neutral" />
             <Badge variant="success" label="公開中" />
             <Badge variant="warning" label="下書き" />

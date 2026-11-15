@@ -4,6 +4,8 @@ import { useState } from 'react';
 
 import { ContactForm, type ContactFormValues } from '@/components/ContactForm/ContactForm';
 
+import { Choice } from './choice';
+
 // Storybook の Controls / 各 Story に相当する切り替えを、Next.js のページ上で行う。
 // 部品は同じ ContactForm。onSubmit の振る舞いと defaultValues を変えて状態を作る。
 
@@ -41,47 +43,6 @@ const submitters: Record<Result, () => Promise<void>> = {
   failure: () => new Promise((_, reject) => setTimeout(() => reject(new Error('demo')), 600)),
   pending: () => new Promise(() => {}),
 };
-
-function Choice<T extends string>({
-  legend,
-  name,
-  value,
-  options,
-  onChange,
-}: {
-  legend: string;
-  name: string;
-  value: T;
-  options: Record<T, { label: string }>;
-  onChange: (v: T) => void;
-}) {
-  return (
-    <fieldset>
-      <legend className="text-sm font-semibold text-fg">{legend}</legend>
-      <div className="mt-2 flex flex-wrap gap-2">
-        {(Object.keys(options) as T[]).map((key) => (
-          <label
-            key={key}
-            className={[
-              'cursor-pointer rounded-control border-2 px-3 py-1.5 text-sm text-fg',
-              value === key ? 'border-brand' : 'border-border hover:border-brand',
-            ].join(' ')}
-          >
-            <input
-              type="radio"
-              name={name}
-              value={key}
-              checked={value === key}
-              onChange={() => onChange(key)}
-              className="mr-1.5 accent-[var(--brand)]"
-            />
-            {options[key].label}
-          </label>
-        ))}
-      </div>
-    </fieldset>
-  );
-}
 
 export function ContactPlayground() {
   const [result, setResult] = useState<Result>('success');
