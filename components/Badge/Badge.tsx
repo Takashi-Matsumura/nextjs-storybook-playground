@@ -33,7 +33,7 @@ export const Badge = ({
   return (
     <span
       className={[
-        'inline-block rounded-full font-bold leading-none whitespace-nowrap',
+        'inline-block rounded-badge font-bold leading-none whitespace-nowrap',
         variantClasses[variant],
         sizeClasses[size],
         className,

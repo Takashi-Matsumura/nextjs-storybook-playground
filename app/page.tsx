@@ -1,4 +1,5 @@
 import { Badge } from "@/components/Badge/Badge";
+import { BrandSwitcher } from "./brand-switcher";
 import { ContactDemo } from "./contact-demo";
 
 /* ---------- 例題のコード（表示用の文字列） ---------- */
@@ -448,6 +449,35 @@ export default function Home() {
                 </div>
               </li>
             ))}
+          </ul>
+
+          {/* ブランド切り替え */}
+          <h3 className="mt-10 text-lg font-semibold text-zinc-900 dark:text-zinc-50">
+            複数ブランドを切り替える（マルチブランド）
+          </h3>
+          <p className="mt-2 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+            部品はそのままで、<strong>トークンの値だけ</strong>をブランドごとに差し替えます。
+            <Mono>{'<html data-brand="ocean">'}</Mono> にすると、<Mono>globals.css</Mono> の{" "}
+            <Mono>{'[data-brand="ocean"]'}</Mono> の値が使われます。下のボタンで切り替えてみてください。
+          </p>
+          <div className="mt-4 rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
+            <BrandSwitcher />
+            <div className="mt-5 flex flex-wrap items-center gap-3 border-t border-zinc-200 pt-5 dark:border-zinc-800">
+              <span className="rounded-control bg-brand px-4 py-2 text-sm font-semibold text-on-brand">
+                ブランドのボタン
+              </span>
+              <Badge label="Neutral" />
+              <Badge variant="success" label="公開中" />
+              <Badge variant="danger" label="エラー" />
+            </div>
+          </div>
+          <ul className="mt-4 list-disc space-y-1 pl-5 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+            <li>変わるのは、トークンを使っている部分だけです（上の色見本・Badge の角・フォームの送信ボタンなど）。</li>
+            <li>このページの見出しやカードは色を直書きしているので変わりません。これが「直書きするとブランドに追従できない」実例です。</li>
+            <li>
+              Storybook ではツールバーの <strong>Brand</strong> メニューで同じ切り替えができ、<Mono>npm test</Mono>{" "}
+              は全 Story を「2ブランド × ライト／ダーク」で検査します。
+            </li>
           </ul>
 
           {/* コード */}

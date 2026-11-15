@@ -33,6 +33,24 @@
   --danger-bg: #fee2e2;
   --danger-fg: #991b1b;
   --danger: #b91c1c;
+
+  /* 形 */
+  --radius-control-value: 0.375rem;
+  --radius-badge-value: 9999px;
+}
+
+/* ---------------------------------------------------------
+   ブランド: Ocean（青・角ばった形）
+   ブランドで変わるのは「ブランド色」と「角丸」だけ。
+   状態の色（成功・エラーなど）は全ブランド共通。
+   既定（data-brand なし / "sakura"）は上の :root の値。
+   --------------------------------------------------------- */
+[data-brand="ocean"] {
+  --brand: #0369a1;
+  --brand-strong: #075985;
+  --on-brand: #ffffff;
+  --radius-control-value: 0.125rem;
+  --radius-badge-value: 0.25rem;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -58,6 +76,13 @@
     --danger-bg: #7f1d1d;
     --danger-fg: #fee2e2;
     --danger: #f87171;
+  }
+
+  /* :root のダーク値は [data-brand] と同じ詳細度で後に来るため、ここで Ocean を上書きし直す */
+  [data-brand="ocean"] {
+    --brand: #0369a1;
+    --brand-strong: #075985;
+    --on-brand: #ffffff;
   }
 }
 
@@ -85,7 +110,8 @@
   --color-danger-fg: var(--danger-fg);
   --color-danger: var(--danger);
 
-  --radius-control: 0.375rem;
+  --radius-control: var(--radius-control-value);
+  --radius-badge: var(--radius-badge-value);
 
   /* Storybook では next/font が読み込まれないため、フォールバックを用意する */
   --font-sans: var(--font-geist-sans, ui-sans-serif, system-ui, sans-serif);
