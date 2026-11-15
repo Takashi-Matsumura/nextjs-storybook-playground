@@ -9,8 +9,10 @@ export interface ContactFormValues {
 }
 
 export interface ContactFormProps {
-  /** 入力チェックを通過したときに呼ばれる */
+  /** 入力チェックを通過したときに呼ばれる。Promise を reject すると「送信に失敗」の表示になる */
   onSubmit: (values: ContactFormValues) => void | Promise<void>;
+  /** 最初から入っている値（編集画面や、入力済みの状態を見たいときに使う） */
+  defaultValues?: Partial<ContactFormValues>;
 }
 
 type Errors = Partial<Record<keyof ContactFormValues, string>>;
@@ -29,10 +31,10 @@ function validate(values: ContactFormValues): Errors {
 const emptyValues: ContactFormValues = { name: '', email: '', message: '' };
 
 /** お問い合わせフォーム */
-export const ContactForm = ({ onSubmit }: ContactFormProps) => {
-  const [values, setValues] = useState<ContactFormValues>(emptyValues);
+export const ContactForm = ({ onSubmit, defaultValues }: ContactFormProps) => {
+  const [values, setValues] = useState<ContactFormValues>({ ...emptyValues, ...defaultValues });
   const [errors, setErrors] = useState<Errors>({});
-  const [status, setStatus] = useState<'idle' | 'submitting' | 'done'>('idle');
+  const [status, setStatus] = useState<'idle' | 'submitting' | 'done' | 'failed'>('idle');
 
   const update = (key: keyof ContactFormValues) => (value: string) => {
     setValues((v) => ({ ...v, [key]: value }));
@@ -46,7 +48,13 @@ export const ContactForm = ({ onSubmit }: ContactFormProps) => {
     if (Object.keys(nextErrors).length > 0) return;
 
     setStatus('submitting');
-    await onSubmit(values);
+    try {
+      await onSubmit(values);
+    } catch {
+      // 失敗したときは入力を残して、もう一度送れるようにする
+      setStatus('failed');
+      return;
+    }
     setValues(emptyValues);
     setStatus('done');
   };
@@ -82,6 +90,11 @@ export const ContactForm = ({ onSubmit }: ContactFormProps) => {
       <p role="status" className="min-h-5 text-sm text-success-fg">
         {status === 'done' ? '送信しました。ありがとうございます。' : ''}
       </p>
+      {status === 'failed' && (
+        <p role="alert" className="-mt-4 text-sm text-danger">
+          送信に失敗しました。時間をおいて、もう一度お試しください。
+        </p>
+      )}
     </form>
   );
 };

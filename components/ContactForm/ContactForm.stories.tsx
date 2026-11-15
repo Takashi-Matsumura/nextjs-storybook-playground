@@ -11,13 +11,65 @@ const meta = {
   tags: ['autodocs'],
   // fn() で onSubmit をスパイにする（呼ばれた回数・引数を検証できる）
   args: { onSubmit: fn() },
+  // Controls で defaultValues を書き換えたら、フォームを作り直して反映する
+  // （defaultValues は「最初の値」なので、作り直さないと画面に反映されない）
+  render: (args) => <ContactForm key={JSON.stringify(args.defaultValues ?? {})} {...args} />,
 } satisfies Meta<typeof ContactForm>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+const filled = {
+  name: '山田 太郎',
+  email: 'taro@example.com',
+  message: 'Storybook について質問があります。',
+};
+
+// ---------- 見た目の状態（Controls で値を書き換えて試せる） ----------
+
 // 何も操作しない初期表示
 export const Default: Story = {};
+
+// 入力済みの状態。Controls の defaultValues を書き換えると表示が変わる
+export const Filled: Story = {
+  args: { defaultValues: filled },
+};
+
+// 長い文章を入れても、レイアウトが崩れないか
+export const LongText: Story = {
+  args: {
+    defaultValues: {
+      name: 'とても長い名前の山田 太郎左衛門之助',
+      email: 'very.long.email.address.for.layout.check@example.co.jp',
+      message: 'Storybook について質問があります。'.repeat(8),
+    },
+  },
+};
+
+// 送信中：onSubmit が終わらないようにして「送信中…」の状態で止める
+export const Submitting: Story = {
+  args: { defaultValues: filled, onSubmit: fn(() => new Promise<void>(() => {})) },
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.click(canvas.getByRole('button', { name: '送信する' }));
+    const button = await canvas.findByRole('button', { name: '送信中…' });
+    await expect(button).toBeDisabled();
+  },
+};
+
+// 送信失敗：onSubmit が失敗（reject）したときのエラー表示。入力は残る
+export const SubmitFailed: Story = {
+  args: { defaultValues: filled, onSubmit: fn(() => Promise.reject(new Error('network'))) },
+  play: async ({ args, canvas, userEvent }) => {
+    await userEvent.click(canvas.getByRole('button', { name: '送信する' }));
+    await expect(await canvas.findByRole('alert')).toHaveTextContent('送信に失敗しました');
+    await expect(canvas.getByLabelText('お名前')).toHaveValue(filled.name);
+    // もう一度送信できる
+    await expect(canvas.getByRole('button', { name: '送信する' })).toBeEnabled();
+    await expect(args.onSubmit).toHaveBeenCalledTimes(1);
+  },
+};
+
+// ---------- 操作の流れ（Interaction test） ----------
 
 // ① 正しく入力して送信 → onSubmit が入力値で呼ばれ、完了メッセージが出る
 export const SubmitSuccess: Story = {
