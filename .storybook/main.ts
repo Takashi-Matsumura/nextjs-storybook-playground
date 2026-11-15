@@ -21,7 +21,11 @@ const config: StorybookConfig = {
   async viteFinal(config) {
     const { mergeConfig } = await import('vite');
     const { default: tailwindcss } = await import('@tailwindcss/vite');
-    return mergeConfig(config, { plugins: [tailwindcss()] });
+    return mergeConfig(config, {
+      plugins: [tailwindcss()],
+      // next build の出力（.next/）の変更で Storybook が再読み込みしないようにする
+      server: { watch: { ignored: ['**/.next/**'] } },
+    });
   },
 };
 export default config;
