@@ -28,3 +28,11 @@
   padding: 12px 24px;
   font-size: 16px;
 }
+
+/* ダークモード: 黒い背景でも読めるように文字色と枠線を明るくする */
+@media (prefers-color-scheme: dark) {
+  .storybook-button--secondary {
+    box-shadow: rgba(255, 255, 255, 0.3) 0px 0px 0px 1px inset;
+    color: #ededed;
+  }
+}

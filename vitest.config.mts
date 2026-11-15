@@ -25,7 +25,17 @@ export default defineConfig({
             enabled: true,
             headless: true,
             provider: playwright({}),
-            instances: [{ browser: 'chromium' }],
+            // 同じ Story を「ライト」と「ダーク」の2つのブラウザで実行する。
+            // ダーク側は prefers-color-scheme: dark になり、Tailwind の dark: クラスが効いた状態で
+            // play 関数と a11y チェック（コントラストなど）が走る。
+            instances: [
+              { browser: 'chromium', name: 'light' },
+              {
+                browser: 'chromium',
+                name: 'dark',
+                provider: playwright({ contextOptions: { colorScheme: 'dark' } }),
+              },
+            ],
           },
         },
       },

@@ -66,3 +66,10 @@
 .storybook-page .tip-wrapper svg path {
   fill: #1ea7fd;
 }
+
+/* ダークモード: 黒い背景でも読めるように文字色を明るくする */
+@media (prefers-color-scheme: dark) {
+  .storybook-page {
+    color: #ededed;
+  }
+}

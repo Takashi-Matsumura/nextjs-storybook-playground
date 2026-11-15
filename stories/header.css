@@ -30,3 +30,13 @@
   color: #333;
   font-size: 14px;
 }
+
+/* ダークモード: 黒い背景でも読めるように文字色と区切り線を明るくする */
+@media (prefers-color-scheme: dark) {
+  .storybook-header {
+    border-bottom-color: rgba(255, 255, 255, 0.15);
+  }
+  .storybook-header .welcome {
+    color: #ededed;
+  }
+}
