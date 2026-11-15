@@ -5,11 +5,12 @@ import { Badge } from "@/components/Badge/Badge";
 import { BrandSwitcher } from "../brand-switcher";
 import { BadgePlayground } from "./badge-playground";
 import { ButtonPlayground } from "./button-playground";
+import { HeaderPlayground } from "./header-playground";
 import { ContactPlayground } from "./contact-playground";
 
 export const metadata: Metadata = {
   title: "部品を Next.js で使う | Storybook 学習アプリ",
-  description: "Storybook で作った部品（BrandSwitcher・Badge・Button・ContactForm）を Next.js のページで使う例",
+  description: "Storybook で作った部品（BrandSwitcher・Badge・Button・Header・ContactForm）を Next.js のページで使う例",
 };
 
 // このページは色・角丸をすべてデザイントークン（bg-surface, text-fg, border-border など）で指定している。
@@ -119,6 +120,13 @@ export default function PlaygroundPage() {
           lead="primary・size・backgroundColor・label を変えると、その場で表示とコードが変わります。押すとクリックの記録が残ります。"
         >
           <ButtonPlayground />
+        </Block>
+
+        <Block
+          title="Header（Storybook のサンプル）"
+          lead="ログイン状態・名前・画面の幅を変えて表示を確かめられます。ヘッダーのボタンを押すとイベントが記録されます。"
+        >
+          <HeaderPlayground />
         </Block>
 
         <Block
