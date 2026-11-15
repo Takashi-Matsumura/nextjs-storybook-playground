@@ -289,7 +289,7 @@ export default function Home() {
           title="例題：Badge を3つのファイルで見る"
           lead="同じ Badge が「部品」「Story」「ページ」の3か所に登場します。"
         >
-          <div className="grid gap-6 lg:grid-cols-3">
+          <div className="grid gap-6">
             <div>
               <p className="mb-2 text-sm font-semibold text-amber-800 dark:text-amber-400">
                 ① 部品を定義する
@@ -334,7 +334,7 @@ export default function Home() {
             </>
           }
         >
-          <div className="grid items-start gap-6 lg:grid-cols-2">
+          <div className="grid gap-6">
             <Code>{codePlay}</Code>
             <div className="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
               <p className="mb-4 text-sm font-semibold text-zinc-700 dark:text-zinc-300">
@@ -344,7 +344,7 @@ export default function Home() {
             </div>
           </div>
           <p className="mt-4 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
-            右のフォームは、Storybook で「正しい入力」「空送信」「メール形式エラー」の3パターンを自動テスト済みの部品です。
+            このフォームは、Storybook で「正しい入力」「空送信」「メール形式エラー」の3パターンを自動テスト済みの部品です。
             a11y アドオンで、色のコントラストやラベルの付け忘れも同時に検査しています。
           </p>
         </Section>
