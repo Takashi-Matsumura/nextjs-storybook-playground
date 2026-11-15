@@ -274,10 +274,10 @@ export default function Home() {
           </ol>
           <div className="mt-4 flex flex-wrap gap-4 text-xs text-zinc-600 dark:text-zinc-400">
             <span className="flex items-center gap-1.5">
-              <span className="size-3 rounded-sm border-2 border-pink-300 bg-pink-50" /> Storybook で行う
+              <span className="size-3 rounded-sm border-2 border-pink-300 bg-pink-50 dark:border-pink-800 dark:bg-pink-950" /> Storybook で行う
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="size-3 rounded-sm border-2 border-sky-300 bg-sky-50" /> Next.js で行う
+              <span className="size-3 rounded-sm border-2 border-sky-300 bg-sky-50 dark:border-sky-800 dark:bg-sky-950" /> Next.js で行う
             </span>
           </div>
         </Section>

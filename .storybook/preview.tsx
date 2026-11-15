@@ -3,8 +3,19 @@ import type { Preview } from '@storybook/nextjs-vite'
 // Next.js と同じ Tailwind（globals.css）を Storybook でも読み込む
 import '../app/globals.css'
 
+import { themes } from 'storybook/theming'
+
+// OS がダークモードなら、Docs ページもダークテーマにする
+// （Tailwind の dark: クラスと Docs の背景色をそろえるため）
+const prefersDark =
+  typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches
+
 const preview: Preview = {
   parameters: {
+    docs: {
+      theme: prefersDark ? themes.dark : themes.light,
+    },
+
     controls: {
       matchers: {
        color: /(background|color)$/i,
