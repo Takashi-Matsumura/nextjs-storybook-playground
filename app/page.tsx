@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { Badge } from "@/components/Badge/Badge";
 import { BrandSwitcher } from "./brand-switcher";
 import { ContactDemo } from "./contact-demo";
@@ -197,6 +199,12 @@ export default function Home() {
             <strong>Storybook</strong> はその横に置く、画面の部品（コンポーネント）の
             <strong>「カタログ兼作業台兼テスト場」</strong>です。
           </p>
+          <Link
+            href="/playground"
+            className="mt-6 inline-flex items-center rounded-control bg-brand px-4 py-2 text-sm font-semibold text-on-brand hover:bg-brand-strong"
+          >
+            作った部品を Next.js で使ってみる（BrandSwitcher など）→
+          </Link>
           <nav aria-label="目次" className="mt-8 flex flex-wrap gap-2">
             {toc.map(([id, label]) => (
               <a
@@ -478,6 +486,13 @@ export default function Home() {
               Storybook ではツールバーの <strong>Brand</strong> メニューで同じ切り替えができ、<Mono>npm test</Mono>{" "}
               は全 Story を「2ブランド × ライト／ダーク」で検査します。
             </li>
+            <li>
+              ページ全体をトークンで組んだ例は{" "}
+              <Link href="/playground" className="font-semibold text-fg underline underline-offset-4">
+                部品を Next.js で使う
+              </Link>{" "}
+              ページで試せます。
+            </li>
           </ul>
 
           {/* コード */}
@@ -593,6 +608,13 @@ export default function Home() {
               すべての Story を、ブラウザで自動テストします。
             </Card>
           </div>
+          <p className="mt-4 text-sm text-zinc-600 dark:text-zinc-400">
+            Storybook で作った部品を Next.js のページで使う例は{" "}
+            <Link href="/playground" className="font-semibold text-zinc-900 underline underline-offset-4 dark:text-zinc-50">
+              /playground
+            </Link>{" "}
+            にあります。
+          </p>
         </Section>
 
         <footer className="mt-20 border-t border-zinc-200 pt-6 text-xs text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
