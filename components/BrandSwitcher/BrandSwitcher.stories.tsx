@@ -35,6 +35,27 @@ export const SwatchesShowOwnBrand: Story = {
   },
 };
 
+// 選択中のボタンでも、色見本はボタンの背景と違う色になる（見本が埋もれない）
+// ブランドごと（npm test の sakura / ocean）に、両方のボタンを選択中にして確かめる
+export const SelectedSwatchStandsOut: Story = {
+  render: function Render(args) {
+    return (
+      <div className="flex flex-col gap-3">
+        <BrandSwitcher {...args} value="sakura" />
+        <BrandSwitcher {...args} value="ocean" />
+      </div>
+    );
+  },
+  play: async ({ canvas }) => {
+    const pressed = canvas.getAllByRole('button', { pressed: true });
+    await expect(pressed).toHaveLength(2);
+    for (const button of pressed) {
+      const swatch = button.querySelector('[data-testid^="swatch-"]')!;
+      await expect(getComputedStyle(swatch).backgroundColor).not.toBe(getComputedStyle(button).backgroundColor);
+    }
+  },
+};
+
 // ① ボタンを押すと、押したブランドで onChange が呼ばれる
 export const ClickCallsOnChange: Story = {
   play: async ({ args, canvas, userEvent }) => {

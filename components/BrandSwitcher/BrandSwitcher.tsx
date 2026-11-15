@@ -30,22 +30,30 @@ export const BrandSwitcher = ({ value, onChange }: BrandSwitcherProps) => {
             onClick={() => onChange(b.value)}
             className={[
               'inline-flex items-center rounded-control border-2 px-4 py-2 text-sm font-semibold',
+              // 選択中は塗りつぶさず「ブランド色の太い枠 + ✓」で示す。
+              // 塗りつぶすと、同じブランドの色見本がボタンの色に埋もれて見えなくなるため
               active
-                ? 'border-brand bg-brand text-on-brand'
+                ? 'border-brand bg-surface text-fg ring-2 ring-brand'
                 : 'border-border bg-surface text-fg hover:border-brand',
             ].join(' ')}
           >
             {/* 色見本: data-brand でこの要素の中だけ「そのボタンのブランド」のトークンにする。
                 今のブランドに関係なく、自分のブランドの色と形（角丸）で表示される。
-                枠線は currentColor（ボタンの文字色）なので、どの背景でも輪郭が見える */}
+                枠線は currentColor（文字色）なので、ライト/ダークどちらでも輪郭が見える */}
             <span
               aria-hidden
               data-brand={b.value}
               data-testid={`swatch-${b.value}`}
-              className="mr-2 inline-block size-3.5 rounded-badge bg-brand ring-2 ring-current"
+              className="mr-2 inline-block size-3.5 rounded-badge bg-brand ring-1 ring-current"
             />
             {b.label}
             <span className="ml-1.5 font-normal">（{b.note}）</span>
+            {/* 色だけに頼らず、形でも選択中がわかるようにする */}
+            {active && (
+              <span aria-hidden className="ml-2">
+                ✓
+              </span>
+            )}
           </button>
         );
       })}
