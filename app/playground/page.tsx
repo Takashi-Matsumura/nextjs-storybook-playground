@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { Badge } from "@/components/Badge/Badge";
 import { BrandSwitcher } from "../brand-switcher";
-import { ContactDemo } from "../contact-demo";
+import { ContactPlayground } from "./contact-playground";
 
 export const metadata: Metadata = {
   title: "部品を Next.js で使う | Storybook 学習アプリ",
@@ -109,9 +109,9 @@ export default function PlaygroundPage() {
 
         <Block
           title="ContactForm"
-          lead="空のまま送信するとエラー表示、正しく入力すると送信完了の表示になります（実際には送信しません）。"
+          lead="結果と初期値を選んでから送信すると、入力エラー・送信中・成功・失敗の各状態を確かめられます（実際には送信しません）。"
         >
-          <ContactDemo />
+          <ContactPlayground />
         </Block>
 
         <Block
