@@ -29,12 +29,21 @@ export const BrandSwitcher = ({ value, onChange }: BrandSwitcherProps) => {
             aria-pressed={active}
             onClick={() => onChange(b.value)}
             className={[
-              'rounded-control border-2 px-4 py-2 text-sm font-semibold',
+              'inline-flex items-center rounded-control border-2 px-4 py-2 text-sm font-semibold',
               active
                 ? 'border-brand bg-brand text-on-brand'
                 : 'border-border bg-surface text-fg hover:border-brand',
             ].join(' ')}
           >
+            {/* 色見本: data-brand でこの要素の中だけ「そのボタンのブランド」のトークンにする。
+                今のブランドに関係なく、自分のブランドの色と形（角丸）で表示される。
+                枠線は currentColor（ボタンの文字色）なので、どの背景でも輪郭が見える */}
+            <span
+              aria-hidden
+              data-brand={b.value}
+              data-testid={`swatch-${b.value}`}
+              className="mr-2 inline-block size-3.5 rounded-badge bg-brand ring-2 ring-current"
+            />
             {b.label}
             <span className="ml-1.5 font-normal">（{b.note}）</span>
           </button>

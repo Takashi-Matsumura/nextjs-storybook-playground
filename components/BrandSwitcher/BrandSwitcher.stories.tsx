@@ -24,6 +24,17 @@ export const OceanSelected: Story = {
   args: { value: 'ocean' },
 };
 
+// 色見本は、今のブランド（ツールバー／npm test のブランド）に関係なく、
+// それぞれ自分のブランドの色で表示される（data-brand による範囲指定のテスト）
+export const SwatchesShowOwnBrand: Story = {
+  play: async ({ canvas }) => {
+    const sakura = canvas.getByTestId('swatch-sakura');
+    const ocean = canvas.getByTestId('swatch-ocean');
+    await expect(getComputedStyle(sakura).backgroundColor).toBe('rgb(219, 39, 119)'); // #db2777
+    await expect(getComputedStyle(ocean).backgroundColor).toBe('rgb(3, 105, 161)'); // #0369a1
+  },
+};
+
 // ① ボタンを押すと、押したブランドで onChange が呼ばれる
 export const ClickCallsOnChange: Story = {
   play: async ({ args, canvas, userEvent }) => {
