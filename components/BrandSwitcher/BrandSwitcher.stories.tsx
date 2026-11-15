@@ -1,0 +1,70 @@
+import { useState } from 'react';
+
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+
+import { expect, fn } from 'storybook/test';
+
+import { BrandSwitcher, type Brand } from './BrandSwitcher';
+
+const meta = {
+  title: 'Components/BrandSwitcher',
+  component: BrandSwitcher,
+  parameters: { layout: 'centered' },
+  tags: ['autodocs'],
+  args: { value: 'sakura', onChange: fn() },
+} satisfies Meta<typeof BrandSwitcher>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+// 選択中の状態ごとの表示（a11y テストで「選択中ボタンの文字のコントラスト」も検査される）
+export const SakuraSelected: Story = {};
+
+export const OceanSelected: Story = {
+  args: { value: 'ocean' },
+};
+
+// ① ボタンを押すと、押したブランドで onChange が呼ばれる
+export const ClickCallsOnChange: Story = {
+  play: async ({ args, canvas, userEvent }) => {
+    await userEvent.click(canvas.getByRole('button', { name: /Ocean/ }));
+    await expect(args.onChange).toHaveBeenCalledTimes(1);
+    await expect(args.onChange).toHaveBeenCalledWith('ocean');
+  },
+};
+
+// ② 状態を持たせて、選択状態（aria-pressed）が切り替わることを確かめる
+export const Interactive: Story = {
+  render: function Render(args) {
+    const [brand, setBrand] = useState<Brand>(args.value);
+    return (
+      <BrandSwitcher
+        value={brand}
+        onChange={(b) => {
+          setBrand(b);
+          args.onChange(b);
+        }}
+      />
+    );
+  },
+  play: async ({ canvas, userEvent, step }) => {
+    const sakura = canvas.getByRole('button', { name: /Sakura/ });
+    const ocean = canvas.getByRole('button', { name: /Ocean/ });
+
+    await step('最初は Sakura が選択中', async () => {
+      await expect(sakura).toHaveAttribute('aria-pressed', 'true');
+      await expect(ocean).toHaveAttribute('aria-pressed', 'false');
+    });
+
+    await step('Ocean を押すと Ocean が選択中になる', async () => {
+      await userEvent.click(ocean);
+      await expect(ocean).toHaveAttribute('aria-pressed', 'true');
+      await expect(sakura).toHaveAttribute('aria-pressed', 'false');
+    });
+
+    await step('Sakura を押すと元に戻る', async () => {
+      await userEvent.click(sakura);
+      await expect(sakura).toHaveAttribute('aria-pressed', 'true');
+    });
+  },
+};
