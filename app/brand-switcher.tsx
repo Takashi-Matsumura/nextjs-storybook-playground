@@ -36,7 +36,7 @@ export function BrandSwitcher() {
             ].join(' ')}
           >
             {b.label}
-            <span className="ml-1.5 font-normal opacity-90">（{b.note}）</span>
+            <span className="ml-1.5 font-normal">（{b.note}）</span>
           </button>
         );
       })}
