@@ -9,11 +9,13 @@ export interface BadgeProps {
   className?: string;
 }
 
+// 色はデザイントークン（app/globals.css）の名前で指定する。
+// ダークモードの色もトークン側で切り替わるので、dark: クラスは不要。
 const variantClasses = {
-  neutral: 'bg-zinc-200 text-zinc-700 dark:bg-zinc-700 dark:text-zinc-100',
-  success: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100',
-  warning: 'bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-100',
-  danger: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-100',
+  neutral: 'bg-neutral-bg text-neutral-fg',
+  success: 'bg-success-bg text-success-fg',
+  warning: 'bg-warning-bg text-warning-fg',
+  danger: 'bg-danger-bg text-danger-fg',
 };
 
 const sizeClasses = {

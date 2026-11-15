@@ -45,6 +45,42 @@ export const EmptySubmit = {
   },
 };`;
 
+const codeTokens = `/* app/globals.css — ブランドの決まりを1か所で定義 */
+:root {
+  --brand: #db2777;
+  --success-bg: #dcfce7;
+  --success-fg: #166534;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --success-bg: #14532d;   /* ダーク用の値 */
+    --success-fg: #dcfce7;
+  }
+}
+@theme inline {
+  --color-brand: var(--brand);          /* → bg-brand */
+  --color-success-bg: var(--success-bg); /* → bg-success-bg */
+  --color-success-fg: var(--success-fg); /* → text-success-fg */
+}`;
+
+const codeBefore = `// ❌ 色を直書き（画面ごとにバラバラになりやすい）
+success: "bg-green-100 text-green-800
+          dark:bg-green-900 dark:text-green-100"`;
+
+const codeAfter = `// ✅ トークンの名前で指定（ダークも自動で切り替わる）
+success: "bg-success-bg text-success-fg"`;
+
+const tokenSwatches = [
+  ["bg-brand", "var(--brand)", "ブランド"],
+  ["bg-surface", "var(--surface)", "面"],
+  ["text-fg", "var(--fg)", "文字"],
+  ["border-border", "var(--border)", "枠線"],
+  ["bg-success-bg", "var(--success-bg)", "成功"],
+  ["bg-warning-bg", "var(--warning-bg)", "注意"],
+  ["bg-danger-bg", "var(--danger-bg)", "エラー"],
+  ["text-danger", "var(--danger)", "エラー文"],
+] as const;
+
 /* ---------- 小さな部品 ---------- */
 
 function Section({
@@ -136,6 +172,7 @@ const toc = [
   ["flow", "開発の流れ"],
   ["example", "例題：Badge"],
   ["test", "例題：フォームのテスト"],
+  ["design-system", "デザインシステム"],
   ["compare", "役割の比較"],
   ["faq", "よくある誤解"],
   ["try", "このアプリで試す"],
@@ -349,8 +386,99 @@ export default function Home() {
           </p>
         </Section>
 
-        {/* 6. 比較 */}
-        <Section id="compare" num="06" title="役割の比較">
+        {/* 6. デザインシステム */}
+        <Section
+          id="design-system"
+          num="06"
+          title="デザインシステムとして使う"
+          lead={
+            <>
+              アプリの「ブランド」を見た目の面で統一するのにも Storybook を使います。
+              色・文字・角丸などの<strong>決まり（デザイントークン）</strong>と、それを使った
+              <strong>部品</strong>をセットで管理する仕組みを「デザインシステム」と呼びます。
+            </>
+          }
+        >
+          {/* 3層の図 */}
+          <div className="grid gap-4 rounded-2xl border border-zinc-200 bg-white p-4 sm:grid-cols-[1fr_auto] sm:p-6 dark:border-zinc-800 dark:bg-zinc-950">
+            <div className="flex flex-col">
+              <Card tone="amber" title="① デザイントークン" sub="app/globals.css">
+                「ブランドの決まり」を名前付きの変数にしたもの。
+                <Mono>--brand</Mono>、<Mono>--success-bg</Mono> など。値を変えるのはここだけ。
+              </Card>
+              <Down label="名前で使う（bg-brand, text-fg …）" />
+              <Card tone="amber" title="② コンポーネント" sub="components/*.tsx">
+                Button・Badge・Form などを、トークンだけで作る。色を直接書かない。
+              </Card>
+              <Down label="組み合わせる" />
+              <Card tone="sky" title="③ 画面・アプリ" sub="app/**/page.tsx">
+                部品を並べて画面を作る。ブランドは部品経由で自然にそろう。
+              </Card>
+            </div>
+            <div className="flex flex-row items-stretch gap-3 sm:flex-col sm:justify-start">
+              <div className="flex-1 rounded-xl border-2 border-dashed border-pink-300 bg-pink-50 p-4 text-sm leading-6 text-zinc-700 sm:w-56 sm:flex-none dark:border-pink-800 dark:bg-pink-950/60 dark:text-zinc-300">
+                <p className="font-semibold text-zinc-900 dark:text-zinc-50">Storybook の担当</p>
+                <ul className="mt-2 list-disc space-y-1 pl-4">
+                  <li>①を「Brand / Colors」「Typography」ページで見本帳にする</li>
+                  <li>②を Story でカタログにする</li>
+                  <li>①②の崩れをテストで見つける（ライト／ダーク両方）</li>
+                  <li>デザイナーやチームと共有する</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          {/* 実物のトークン */}
+          <h3 className="mt-10 text-lg font-semibold text-zinc-900 dark:text-zinc-50">
+            このアプリのトークン（実物）
+          </h3>
+          <p className="mt-2 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+            下の色見本は CSS 変数をそのまま表示しています。OS をダークモードにすると、同じ名前のままダーク用の色に切り替わります。
+          </p>
+          <ul className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {tokenSwatches.map(([name, value, label]) => (
+              <li
+                key={name}
+                className="overflow-hidden rounded-lg border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900"
+              >
+                <div className="h-12 border-b border-zinc-200 dark:border-zinc-800" style={{ background: value }} />
+                <div className="p-2">
+                  <p className="font-mono text-xs text-zinc-800 dark:text-zinc-200">{name}</p>
+                  <p className="text-xs text-zinc-600 dark:text-zinc-400">{label}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+
+          {/* コード */}
+          <h3 className="mt-10 text-lg font-semibold text-zinc-900 dark:text-zinc-50">
+            トークンの定義と使い方
+          </h3>
+          <div className="mt-4 grid gap-4">
+            <Code>{codeTokens}</Code>
+            <div className="grid gap-4 md:grid-cols-2">
+              <Code>{codeBefore}</Code>
+              <Code>{codeAfter}</Code>
+            </div>
+          </div>
+          <p className="mt-4 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+            たとえばブランドカラーを変えたくなったら、<Mono>--brand</Mono> の1行を直すだけで、
+            ボタンなど <Mono>bg-brand</Mono> を使うすべての部品が変わります。
+            このページのフォームの「送信する」ボタンも <Mono>bg-brand</Mono> です。
+          </p>
+
+          {/* 注意 */}
+          <div className="mt-6 rounded-xl border-l-4 border-amber-400 bg-amber-50 p-4 text-sm leading-6 text-zinc-700 dark:bg-amber-950/40 dark:text-zinc-300">
+            <p className="font-semibold text-zinc-900 dark:text-zinc-50">注意：Storybook はブランドを「強制」はしない</p>
+            <p className="mt-1">
+              画面で <Mono>bg-green-100</Mono> と直接書けば、それは防げません。統一は
+              「トークン」「部品を使う習慣」「Storybook での見える化とテスト」「レビュー」の組み合わせで成り立ちます。
+            </p>
+          </div>
+        </Section>
+
+        {/* 7. 比較 */}
+        <Section id="compare" num="07" title="役割の比較">
           <div className="overflow-x-auto">
             <table className="w-full min-w-[520px] text-left text-sm">
               <thead className="border-b-2 border-zinc-300 text-zinc-600 dark:border-zinc-700 dark:text-zinc-400">
@@ -381,7 +509,7 @@ export default function Home() {
         </Section>
 
         {/* 7. FAQ */}
-        <Section id="faq" num="07" title="よくある誤解">
+        <Section id="faq" num="08" title="よくある誤解">
           <div className="space-y-3">
             {[
               [
@@ -423,7 +551,7 @@ export default function Home() {
         </Section>
 
         {/* 8. 試す */}
-        <Section id="try" num="08" title="このアプリで試す" lead="ターミナルで次のコマンドを実行します。">
+        <Section id="try" num="09" title="このアプリで試す" lead="ターミナルで次のコマンドを実行します。">
           <div className="grid gap-3 sm:grid-cols-3">
             <Card tone="sky" title="Next.js を起動" sub="npm run dev">
               このページ（http://localhost:3000）が開きます。

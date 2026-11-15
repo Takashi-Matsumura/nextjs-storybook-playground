@@ -1,0 +1,35 @@
+import { Meta, Typeset } from '@storybook/addon-docs/blocks';
+
+<Meta title="Brand/Typography" />
+
+# Typography（文字）
+
+## フォント
+
+- 本文・見出し：`--font-sans`（Geist）→ `font-sans`
+- コード：`--font-mono`（Geist Mono）→ `font-mono`
+
+Next.js では `next/font` で Geist を読み込みます。Storybook では読み込まれないため、
+`globals.css` のフォールバック（システムフォント）で表示されます。
+
+## 文字サイズ
+
+Tailwind の標準サイズを使い、用途を次のように決めています。
+
+- ページ見出し：`text-3xl` / `text-4xl`
+- セクション見出し：`text-2xl`
+- 本文：`text-base` / `text-lg`
+- 補足・ラベル：`text-sm`
+- バッジ：`text-[13px]` / `text-[11px]`
+
+<Typeset
+  fontFamily="var(--font-sans)"
+  fontSizes={['2.25rem', '1.875rem', '1.5rem', '1.125rem', '1rem', '0.875rem', '13px', '11px']}
+  fontWeight={700}
+  sampleText="Next.js と Storybook のブランド見本"
+/>
+
+## 角丸
+
+- 入力欄・ボタン：`--radius-control`（0.375rem）→ `rounded-control`
+- バッジ：`rounded-full`

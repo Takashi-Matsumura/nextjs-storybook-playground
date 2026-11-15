@@ -74,12 +74,12 @@ export const ContactForm = ({ onSubmit }: ContactFormProps) => {
       <button
         type="submit"
         disabled={status === 'submitting'}
-        className="rounded-md bg-zinc-900 px-4 py-2 font-semibold text-white hover:bg-zinc-700 disabled:opacity-60 dark:bg-zinc-100 dark:text-zinc-900"
+        className="rounded-control bg-brand px-4 py-2 font-semibold text-on-brand hover:bg-brand-strong disabled:opacity-60"
       >
         {status === 'submitting' ? '送信中…' : '送信する'}
       </button>
 
-      <p role="status" className="min-h-5 text-sm text-green-700 dark:text-green-400">
+      <p role="status" className="min-h-5 text-sm text-success-fg">
         {status === 'done' ? '送信しました。ありがとうございます。' : ''}
       </p>
     </form>
@@ -104,14 +104,14 @@ function Field({ id, label, value, error, type = 'text', multiline, onChange }: 
     'aria-invalid': error ? true : undefined,
     'aria-describedby': error ? errorId : undefined,
     className: [
-      'w-full rounded-md border bg-white px-3 py-2 text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100',
-      error ? 'border-red-600' : 'border-zinc-400 dark:border-zinc-600',
+      'w-full rounded-control border bg-surface px-3 py-2 text-fg',
+      error ? 'border-danger' : 'border-border',
     ].join(' '),
   };
 
   return (
     <div className="flex flex-col gap-1">
-      <label htmlFor={id} className="text-sm font-medium text-zinc-800 dark:text-zinc-200">
+      <label htmlFor={id} className="text-sm font-medium text-fg">
         {label}
       </label>
       {multiline ? (
@@ -120,7 +120,7 @@ function Field({ id, label, value, error, type = 'text', multiline, onChange }: 
         <input {...common} type={type} onChange={(e) => onChange(e.target.value)} />
       )}
       {error && (
-        <p id={errorId} className="text-sm text-red-700 dark:text-red-400">
+        <p id={errorId} className="text-sm text-danger">
           {error}
         </p>
       )}
