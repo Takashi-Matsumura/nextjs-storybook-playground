@@ -1,0 +1,74 @@
+import { Meta, ColorPalette, ColorItem } from '@storybook/addon-docs/blocks';
+
+import { Badge } from '../components/Badge/Badge';
+
+<Meta title="Brand/Colors" />
+
+# Colors（ブランドカラー）
+
+このアプリで使ってよい色の一覧です。値は **`app/globals.css` の1か所だけ**で管理しています。
+見本は CSS 変数を直接表示しているので、OS をダークモードにするとダーク用の色に切り替わります。
+
+## ブランドの切り替え
+
+このアプリには2つのブランドがあります。画面上部のツールバーの **Brand** メニューで切り替えると、
+このページの色見本や部品がそのブランドの値に変わります。
+
+- **Sakura**（既定）：ピンク・丸い形
+- **Ocean**：ブルー・角ばった形
+
+ブランドで変わるのは「ブランド色」と「角丸」だけで、状態の色（成功・エラーなど）は共通です。
+値は `globals.css` の `:root`（Sakura）と `[data-brand="ocean"]`（Ocean）に書かれています。
+
+## 使い方のルール
+
+- 色は **トークンの名前**（`bg-brand`、`text-fg` など）で指定する
+- `bg-pink-600` や `#db2777` のような **色の直書きはしない**
+- 新しい色が必要になったら、まず `globals.css` にトークンを追加する
+
+- ✅ よい例：`className="bg-success-bg text-success-fg"`
+  → ブランドを変えたいとき、`globals.css` を1行直せば全体が変わる
+- ❌ よくない例：`className="bg-green-100 text-green-800 dark:bg-green-900"`
+  → 画面ごとに色を探して直す必要がある
+
+## ブランド
+
+<ColorPalette>
+  <ColorItem
+    title="Brand"
+    subtitle="主要ボタン・強調"
+    colors={{ 'bg-brand': 'var(--brand)', 'bg-brand-strong (hover)': 'var(--brand-strong)', 'text-on-brand': 'var(--on-brand)' }}
+  />
+</ColorPalette>
+
+## 面・文字・線
+
+<ColorPalette>
+  <ColorItem title="Surface" subtitle="入力欄などの面" colors={{ 'bg-surface': 'var(--surface)' }} />
+  <ColorItem title="Text" subtitle="本文・補足" colors={{ 'text-fg': 'var(--fg)', 'text-fg-muted': 'var(--fg-muted)' }} />
+  <ColorItem title="Border" subtitle="枠線" colors={{ 'border-border': 'var(--border)' }} />
+</ColorPalette>
+
+## 状態
+
+背景（`-bg`）と文字（`-fg`）は必ずペアで使います。組み合わせのコントラストは a11y テストで確認済みです。
+
+<ColorPalette>
+  <ColorItem title="Neutral" subtitle="通常" colors={{ 'bg-neutral-bg': 'var(--neutral-bg)', 'text-neutral-fg': 'var(--neutral-fg)' }} />
+  <ColorItem title="Success" subtitle="成功・公開中" colors={{ 'bg-success-bg': 'var(--success-bg)', 'text-success-fg': 'var(--success-fg)' }} />
+  <ColorItem title="Warning" subtitle="注意・下書き" colors={{ 'bg-warning-bg': 'var(--warning-bg)', 'text-warning-fg': 'var(--warning-fg)' }} />
+  <ColorItem
+    title="Danger"
+    subtitle="エラー"
+    colors={{ 'bg-danger-bg': 'var(--danger-bg)', 'text-danger-fg': 'var(--danger-fg)', 'text-danger（エラー文・枠）': 'var(--danger)' }}
+  />
+</ColorPalette>
+
+### 実際の部品での使われ方
+
+<div style={{ display: 'flex', gap: 8 }}>
+  <Badge label="Neutral" />
+  <Badge variant="success" label="Success" />
+  <Badge variant="warning" label="Warning" />
+  <Badge variant="danger" label="Danger" />
+</div>

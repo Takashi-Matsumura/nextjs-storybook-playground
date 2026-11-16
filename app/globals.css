@@ -1,22 +1,134 @@
 @import "tailwindcss";
 
+/* =========================================================
+   デザイントークン（ブランドの決まり）
+   - 値はここ1か所だけで管理する
+   - コンポーネントは bg-brand / text-fg などの「名前」で使う
+   - ダークモードの値も同じ名前で切り替わる
+   ========================================================= */
+
 :root {
+  /* 基本 */
   --background: #ffffff;
   --foreground: #171717;
+
+  /* ブランドカラー */
+  --brand: #db2777;
+  --brand-strong: #be185d;
+  --on-brand: #ffffff;
+
+  /* 面・文字・線 */
+  --surface: #ffffff;
+  --fg: #18181b;
+  --fg-muted: #52525b;
+  --border: #a1a1aa;
+
+  /* 状態（Badge やメッセージで使う） */
+  --neutral-bg: #e4e4e7;
+  --neutral-fg: #3f3f46;
+  --success-bg: #dcfce7;
+  --success-fg: #166534;
+  --warning-bg: #fef3c7;
+  --warning-fg: #92400e;
+  --danger-bg: #fee2e2;
+  --danger-fg: #991b1b;
+  --danger: #b91c1c;
+
+  /* 形 */
+  --radius-control-value: 0.375rem;
+  --radius-badge-value: 9999px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ---------------------------------------------------------
+   ブランドごとの値
+   ブランドで変わるのは「ブランド色」と「角丸」だけ。
+   状態の色（成功・エラーなど）は全ブランド共通。
+   data-brand は <html> だけでなく、どの要素にも付けられる。
+   付けた要素の中だけ、そのブランドのトークンになる（例：切り替えボタンの色見本）。
+   --------------------------------------------------------- */
+
+/* Sakura（ピンク・丸い）: 既定値は :root と同じ。
+   別ブランドの中で data-brand="sakura" を付けたときに Sakura に戻すため、明示的に書く */
+[data-brand="sakura"] {
+  --brand: #db2777;
+  --brand-strong: #be185d;
+  --on-brand: #ffffff;
+  --radius-control-value: 0.375rem;
+  --radius-badge-value: 9999px;
+}
+
+/* Ocean（ブルー・角ばった） */
+[data-brand="ocean"] {
+  --brand: #0369a1;
+  --brand-strong: #075985;
+  --on-brand: #ffffff;
+  --radius-control-value: 0.125rem;
+  --radius-badge-value: 0.25rem;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+
+    --brand: #db2777;
+    --brand-strong: #be185d;
+    --on-brand: #ffffff;
+
+    --surface: #18181b;
+    --fg: #f4f4f5;
+    --fg-muted: #a1a1aa;
+    --border: #52525b;
+
+    --neutral-bg: #3f3f46;
+    --neutral-fg: #f4f4f5;
+    --success-bg: #14532d;
+    --success-fg: #dcfce7;
+    --warning-bg: #78350f;
+    --warning-fg: #fef3c7;
+    --danger-bg: #7f1d1d;
+    --danger-fg: #fee2e2;
+    --danger: #f87171;
   }
+
+  /* :root のダーク値は [data-brand] と同じ詳細度で後に来るため、ここで Ocean を上書きし直す */
+  [data-brand="ocean"] {
+    --brand: #0369a1;
+    --brand-strong: #075985;
+    --on-brand: #ffffff;
+  }
+}
+
+/* Tailwind のユーティリティ（bg-brand, text-fg, rounded-control …）として公開する */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-brand: var(--brand);
+  --color-brand-strong: var(--brand-strong);
+  --color-on-brand: var(--on-brand);
+
+  --color-surface: var(--surface);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-border: var(--border);
+
+  --color-neutral-bg: var(--neutral-bg);
+  --color-neutral-fg: var(--neutral-fg);
+  --color-success-bg: var(--success-bg);
+  --color-success-fg: var(--success-fg);
+  --color-warning-bg: var(--warning-bg);
+  --color-warning-fg: var(--warning-fg);
+  --color-danger-bg: var(--danger-bg);
+  --color-danger-fg: var(--danger-fg);
+  --color-danger: var(--danger);
+
+  --radius-control: var(--radius-control-value);
+  --radius-badge: var(--radius-badge-value);
+
+  /* Storybook では next/font が読み込まれないため、フォールバックを用意する */
+  --font-sans: var(--font-geist-sans, ui-sans-serif, system-ui, sans-serif);
+  --font-mono: var(--font-geist-mono, ui-monospace, monospace);
 }
 
 body {
